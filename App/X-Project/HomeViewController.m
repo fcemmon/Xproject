@@ -1,0 +1,314 @@
+//
+//  HomeViewController.m
+//  X-Project
+//
+//  Created by admin on 5/27/15.
+//  Copyright (c) 2015 admin. All rights reserved.
+//
+
+#import "HomeViewController.h"
+#import "METransitions.h"
+#import "MEDynamicTransition.h"
+#import "AppManager.h"
+#import "UIViewController+ECSlidingViewController.h"
+#import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
+#import <AFNetworking.h>
+#import "Constants.h"
+#import "ServiceTableViewCell.h"
+#define METERS_PER_MILE 1000
+
+
+@interface HomeViewController ()<CLLocationManagerDelegate,UIAlertViewDelegate, UISearchBarDelegate>{
+    CLLocationCoordinate2D currentCentre;
+    float latitude,longitude;
+    NSMutableArray *services;
+    NSMutableArray *filtered_services;
+}
+@property (nonatomic, strong) METransitions *transitions;
+@property (nonatomic, strong) UIPanGestureRecognizer *dynamicTransitionPanGesture;
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (nonatomic, strong) AppManager *appManager;
+@property (nonatomic, strong) NSString *user_Token;
+@property (nonatomic, strong) NSString *user_id;
+@property (nonatomic, strong) NSString *selected_service_id;
+
+@end
+
+@implementation HomeViewController
+
+@synthesize appManager;
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.mapView.delegate = self;
+    self.mapView.showsUserLocation = YES;
+    
+    //get current location
+    self.locationManager = [[CLLocationManager alloc]init];
+    self.locationManager.delegate = self;
+    self.locationManager.distanceFilter = kCLDistanceFilterNone;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager startUpdatingLocation];
+    [self.locationManager requestAlwaysAuthorization];
+    latitude = self.locationManager.location.coordinate.latitude;
+    longitude = self.locationManager.location.coordinate.longitude;
+    
+    appManager = [AppManager sharedManager];
+    self.user_Token = [appManager getUserToken];
+    if (self.user_Token == nil) {
+        self.user_Token = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [appManager setUserToken:self.user_Token];
+    }else{
+        NSLog(@"UDID: %@", self.user_Token);
+    }
+    services = [[NSMutableArray alloc] init];
+    filtered_services = [[NSMutableArray alloc] init];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+    [self.mapView addGestureRecognizer:tap];
+}
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self setGesture];
+    [self reloadMapView];
+    [self getService_by_location];
+}
+
+-(void)reloadMapView{
+    // show map
+    currentCentre.latitude = self.locationManager.location.coordinate.latitude;
+    currentCentre.longitude = self.locationManager.location.coordinate.longitude;
+    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(currentCentre, 10*METERS_PER_MILE, 10*METERS_PER_MILE);
+    [self.mapView setRegion:viewRegion animated:YES];
+    //set pin
+    MKPointAnnotation *secondpoint=[[MKPointAnnotation alloc]init];
+    secondpoint.coordinate=currentCentre;
+    secondpoint.title = @"My location";
+    [self.mapView addAnnotation:secondpoint];
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self removeGesture];
+}
+
+#pragma Web server APIs
+- (void) getService_by_location{
+    
+    NSString *string_url = [NSString stringWithFormat:@"%@%@",mHostURL,mGetService];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters = @{@"auth_token": self.user_Token,
+                                 @"latitude":[NSString stringWithFormat:@"%f", currentCentre.latitude],
+                                 @"longitude":[NSString stringWithFormat:@"%f", currentCentre.longitude],
+//                                 @"latitude":@"43.91413",
+//                                 @"longitude":@"125.3981",
+                                 @"service_name":@""};
+    [manager POST:string_url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        NSDictionary *jsonResult = responseObject;
+        if ([[jsonResult objectForKey:@"status"] isEqualToString:@"success"]) {
+            
+            self.user_id = [jsonResult objectForKey:@"user_id"];
+            [[NSUserDefaults standardUserDefaults] setValue:self.user_id forKey:@"appId"];
+            [appManager setUserID:self.user_id];
+            NSArray *json_services = [jsonResult objectForKey:@"services"];
+            for (int i = 0; i < [json_services count]; i++) {
+                NSDictionary *temp_service = json_services[i];
+                [services addObject:temp_service];
+            }
+            filtered_services = [[NSMutableArray alloc] initWithArray:services];
+            [self setMapPin];
+            [self.tblview reloadData];
+        }else{
+            [[[UIAlertView alloc] initWithTitle:@"Server Error" message:@"Server error occured" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+- (void) search:(NSString*)searchText {
+    if ( searchText.length >= 1 ) {
+        [self getService_by_name:searchText];
+        NSLog(@"%@",searchText);
+    }
+    if (searchText.length == 0) {
+        filtered_services = [[NSMutableArray alloc] initWithArray:services];
+        [self setMapPin];
+        [self.tblview reloadData];
+    }
+}
+- (BOOL) searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    return YES;
+}
+
+- (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    [self search:searchText];
+}
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+    [searchBar resignFirstResponder];
+}
+
+- (void) getService_by_name:(NSString *)searchkey{
+    NSMutableArray *temp_services = [[NSMutableArray alloc] init];
+    for (int i = 0; i < [services count]; i++) {
+        if ([[services[i] objectForKey:@"service_name"] containsString:searchkey]) {
+            [temp_services addObject:services[i]];
+        }
+    }
+    [filtered_services removeAllObjects];
+    filtered_services = temp_services;
+    [self setMapPin];
+    [self.tblview reloadData];
+}
+
+- (void) setMapPin{
+    //set pin
+    MKPointAnnotation *secondpoint=[[MKPointAnnotation alloc] init];
+    CLLocationCoordinate2D pin_location;
+    for (int i = 0; i < [filtered_services count]; i++) {
+        pin_location.latitude = [[filtered_services[i] objectForKey:@"latitude"] floatValue];
+        pin_location.longitude = [[filtered_services[i] objectForKey:@"longitude"] floatValue];
+        
+        secondpoint.coordinate = pin_location;
+        secondpoint.title = [filtered_services[i] objectForKey:@"service_name"];
+        [self.mapView addAnnotation:secondpoint];
+    }
+}
+
+#pragma  mark UITabelView DB source
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return [filtered_services count];
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 40;
+}
+
+-(ServiceTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *tableIdentifier = @"found_serviceCell";
+    ServiceTableViewCell *serviceCell = (ServiceTableViewCell*)[tableView dequeueReusableCellWithIdentifier:tableIdentifier];
+    [serviceCell.cellImageView sd_setImageWithURL:[NSURL URLWithString:[filtered_services[indexPath.row] objectForKey:@"service_image"]]];
+    NSLog(@"%@",[filtered_services[indexPath.row] objectForKey:@"service_image"]);
+    serviceCell.cellLabel.text = [filtered_services[indexPath.row] objectForKey:@"service_name"];
+    self.selected_service_id = [filtered_services[indexPath.row] objectForKey:@"service_id"];
+    return serviceCell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self.image sd_setImageWithURL:[NSURL URLWithString:[filtered_services[indexPath.row] objectForKey:@"service_image"]]];
+    self.label1.text = [filtered_services[indexPath.row] objectForKey:@"service_name"];
+}
+
+#pragma mark - Gesture
+
+- (void) setGesture {
+    self.transitions.dynamicTransition.slidingViewController = self.slidingViewController;
+    
+    NSDictionary *transitionData = self.transitions.all[0];
+    id<ECSlidingViewControllerDelegate> transition = transitionData[@"transition"];
+    if (transition == (id)[NSNull null]) {
+        self.slidingViewController.delegate = nil;
+    } else {
+        self.slidingViewController.delegate = transition;
+    }
+    
+    NSString *transitionName = transitionData[@"name"];
+    if ([transitionName isEqualToString:METransitionNameDynamic]) {
+        self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGestureCustom;
+        self.slidingViewController.customAnchoredGestures = @[self.dynamicTransitionPanGesture];
+        [self.navigationController.view removeGestureRecognizer:self.slidingViewController.panGesture];
+        [self.navigationController.view addGestureRecognizer:self.dynamicTransitionPanGesture];
+    } else {
+        self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGesturePanning;
+        self.slidingViewController.customAnchoredGestures = @[];
+        [self.navigationController.view removeGestureRecognizer:self.dynamicTransitionPanGesture];
+        [self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
+    }
+    
+}
+
+- (void) removeGesture {
+    [self.navigationController.view removeGestureRecognizer:self.dynamicTransitionPanGesture];
+    [self.navigationController.view removeGestureRecognizer:self.slidingViewController.panGesture];
+}
+
+- (UIPanGestureRecognizer *)dynamicTransitionPanGesture {
+    if (_dynamicTransitionPanGesture) return _dynamicTransitionPanGesture;
+    
+    _dynamicTransitionPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self.transitions.dynamicTransition action:@selector(handleGesture:)];
+    
+    return _dynamicTransitionPanGesture;
+}
+
+- (void) handleGesture:(UIPanGestureRecognizer *)recognizer {
+   [self.transitions.dynamicTransition handlePanGesture:recognizer];
+}
+
+- (void) dismissKeyboard{
+    [self.searchBar resignFirstResponder];
+}
+
+#pragma mark - IBActions
+
+- (IBAction)menuButtonTapped:(id)sender {
+    [self.slidingViewController anchorTopViewToRightAnimated:YES];
+}
+
+- (IBAction)likeButtonTapped:(id)sender{
+    NSString *string_url = [NSString stringWithFormat:@"%@%@",mHostURL,mLikeService];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters = @{@"user_id": self.user_id,
+                                 @"service_id":self.selected_service_id,
+                                 @"like":@"1"};
+    [manager POST:string_url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        NSDictionary *jsonResult = responseObject;
+        if ([[jsonResult objectForKey:@"status"] isEqualToString:@"success"]) {
+            [[[UIAlertView alloc] initWithTitle:@"Like Service" message:@"You like this service." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        }else{
+            [[[UIAlertView alloc] initWithTitle:@"Server Error" message:@"Server error occured" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+- (IBAction)commentButtonTapped:(id)sender{
+    
+    UIAlertView *commentAlert = [[UIAlertView alloc] initWithTitle:@"Comment" message:@"Please leave comment." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    commentAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    UITextField *commentText = [commentAlert textFieldAtIndex:0];
+    commentText.keyboardType = UIKeyboardTypeDefault;
+    commentText.placeholder = @"Enter your comment";
+    [commentAlert show];}
+
+- (void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"Alert button clicked");
+    NSString *comment = [[alertView textFieldAtIndex:0] text];
+    
+    NSString *string_url = [NSString stringWithFormat:@"%@%@",mHostURL,mComment];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters = @{@"user_id": self.user_id,
+                                 @"service_id":self.selected_service_id,
+                                 @"comment":comment};
+    [manager POST:string_url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        NSDictionary *jsonResult = responseObject;
+        if ([[jsonResult objectForKey:@"status"] isEqualToString:@"success"]) {
+            [[[UIAlertView alloc] initWithTitle:@"Comment" message:@"You commented this service." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        }else{
+            [[[UIAlertView alloc] initWithTitle:@"Server Error" message:@"Server error occured" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+@end

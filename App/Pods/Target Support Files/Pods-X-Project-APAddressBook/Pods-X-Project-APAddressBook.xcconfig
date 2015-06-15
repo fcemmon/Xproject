@@ -1,0 +1,1 @@
+PODS_X_PROJECT_APADDRESSBOOK_OTHER_LDFLAGS = -framework "AddressBook"

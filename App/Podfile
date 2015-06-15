@@ -1,0 +1,13 @@
+# Uncomment this line to define a global platform for your project
+# platform :ios, '8.0'
+
+target 'X-Project' do
+pod 'ECSlidingViewController'
+pod 'IQKeyboardManager'
+pod 'MBProgressHUD'
+pod 'APAddressBook'
+pod 'AFNetworking'
+pod 'MYNStickyFlowLayout'
+pod 'SDWebImage'
+pod 'FMMosaicLayout'
+end

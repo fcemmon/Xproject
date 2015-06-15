@@ -1,0 +1,55 @@
+PODS:
+  - AFNetworking (2.5.4):
+    - AFNetworking/NSURLConnection (= 2.5.4)
+    - AFNetworking/NSURLSession (= 2.5.4)
+    - AFNetworking/Reachability (= 2.5.4)
+    - AFNetworking/Security (= 2.5.4)
+    - AFNetworking/Serialization (= 2.5.4)
+    - AFNetworking/UIKit (= 2.5.4)
+  - AFNetworking/NSURLConnection (2.5.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.5.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.5.4)
+  - AFNetworking/Security (2.5.4)
+  - AFNetworking/Serialization (2.5.4)
+  - AFNetworking/UIKit (2.5.4):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - APAddressBook (0.1.8):
+    - APAddressBook/Core (= 0.1.8)
+  - APAddressBook/Core (0.1.8)
+  - ECSlidingViewController (2.0.3)
+  - FMMosaicLayout (0.1.4)
+  - IQKeyboardManager (3.2.3)
+  - MBProgressHUD (0.9.1)
+  - MYNStickyFlowLayout (0.1.2)
+  - SDWebImage (3.7.2):
+    - SDWebImage/Core (= 3.7.2)
+  - SDWebImage/Core (3.7.2)
+
+DEPENDENCIES:
+  - AFNetworking
+  - APAddressBook
+  - ECSlidingViewController
+  - FMMosaicLayout
+  - IQKeyboardManager
+  - MBProgressHUD
+  - MYNStickyFlowLayout
+  - SDWebImage
+
+SPEC CHECKSUMS:
+  AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
+  APAddressBook: cfff7589c5f9ee6ddbe23636b7723c2dbfa60a47
+  ECSlidingViewController: 6485c14f23b4487e9946535421ca8f111f86cc53
+  FMMosaicLayout: c0febf6876c987c425d7e2176d034fa7a2c98cb5
+  IQKeyboardManager: 6ca5c54e3776eb54af4c7caf515833f3cd761d59
+  MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
+  MYNStickyFlowLayout: 64d0c409bd1ad43312485c63bc82e32f038e8fbc
+  SDWebImage: 71b7cdc1d1721d6a82ed62889030225f2c249e29
+
+COCOAPODS: 0.37.2
