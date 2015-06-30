@@ -9,9 +9,10 @@
 #import "LookingViewController.h"
 #import "METransitions.h"
 #import "MEDynamicTransition.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 #import <UIViewController+ECSlidingViewController.h>
 #import <AFNetworking.h>
-#import "LookingCollectionViewCell.h"
+#import "ViewerImageCellTableViewCell.h"
 #import "AppManager.h"
 #import "Constants.h"
 
@@ -54,11 +55,13 @@
 
 - (void) getViewers{
     NSString *string_url = [NSString stringWithFormat:@"%@%@", mHostURL,mGetViewers];
-    NSUserDefaults * myUserDefault = [[NSUserDefaults alloc] initWithSuiteName:@"com.ueda.test"];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = @{@"user_id": self.user_id};
     [manager POST:string_url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
+        
+        self.viewers = [[NSMutableArray alloc] init];
+        
         NSDictionary *jsonResult = responseObject;
         if ([[jsonResult objectForKey:@"status"] isEqualToString:@"success"]) {
             
@@ -76,17 +79,31 @@
     }];
 }
 
-#pragma mark Collection View DB source delegate
+#pragma mark TableView deleate 
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return [self.viewers count];
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView   {
+    return 1;
 }
 
-- (LookingCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *identifier = @"ViewerCell";
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section    {
+   return [self.viewers count];
+}
+
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath   {
+    static NSString * identifier = @"ViewerCell";
     
-    LookingCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-    [cell.ViewerImage sd_setImageWithURL:[NSURL URLWithString:[self.viewers[indexPath.row] objectForKey:@"photo"]]];
+    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    }
+    
+    UIImageView * viewerImage = (UIImageView*)[cell viewWithTag:100];
+    if ([[self.viewers[indexPath.row] objectForKey:@"photo"] isEqualToString:@""]) {
+        [viewerImage setImage:[UIImage imageNamed:@"default_image_01"]];
+    }else   {
+        [viewerImage sd_setImageWithURL:[NSURL URLWithString:[self.viewers[indexPath.row] objectForKey:@"photo"]]];
+    }
+    
     return cell;
 }
 

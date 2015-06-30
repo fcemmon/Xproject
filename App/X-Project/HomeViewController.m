@@ -32,6 +32,7 @@
 @property (nonatomic, strong) NSString *user_Token;
 @property (nonatomic, strong) NSString *user_id;
 @property (nonatomic, strong) NSString *selected_service_id;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndifiner;
 
 @end
 
@@ -63,17 +64,16 @@
     }else{
         NSLog(@"UDID: %@", self.user_Token);
     }
-    services = [[NSMutableArray alloc] init];
-    filtered_services = [[NSMutableArray alloc] init];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.mapView addGestureRecognizer:tap];
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [self setGesture];
     [self reloadMapView];
-    [self getService_by_location];
+    [self getService:@""];
 }
 
 -(void)reloadMapView{
@@ -86,7 +86,7 @@
     MKPointAnnotation *secondpoint=[[MKPointAnnotation alloc]init];
     secondpoint.coordinate=currentCentre;
     secondpoint.title = @"My location";
-    [self.mapView addAnnotation:secondpoint];
+//    [self.mapView addAnnotation:secondpoint];
 }
 
 
@@ -96,18 +96,20 @@
 }
 
 #pragma Web server APIs
-- (void) getService_by_location{
+- (void) getService:(NSString * )searchKey{
     
     NSString *string_url = [NSString stringWithFormat:@"%@%@",mHostURL,mGetService];
-    
+    [self.activityIndifiner startAnimating];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = @{@"auth_token": self.user_Token,
                                  @"latitude":[NSString stringWithFormat:@"%f", currentCentre.latitude],
                                  @"longitude":[NSString stringWithFormat:@"%f", currentCentre.longitude],
-//                                 @"latitude":@"43.91413",
-//                                 @"longitude":@"125.3981",
-                                 @"service_name":@""};
+                                 @"service_name":searchKey};
     [manager POST:string_url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        [self.activityIndifiner stopAnimating];
+        services = [[NSMutableArray alloc] init];
+        filtered_services = [[NSMutableArray alloc] init];
         NSLog(@"JSON: %@", responseObject);
         NSDictionary *jsonResult = responseObject;
         if ([[jsonResult objectForKey:@"status"] isEqualToString:@"success"]) {
@@ -132,15 +134,7 @@
 }
 
 - (void) search:(NSString*)searchText {
-    if ( searchText.length >= 1 ) {
-        [self getService_by_name:searchText];
-        NSLog(@"%@",searchText);
-    }
-    if (searchText.length == 0) {
-        filtered_services = [[NSMutableArray alloc] initWithArray:services];
-        [self setMapPin];
-        [self.tblview reloadData];
-    }
+    
 }
 - (BOOL) searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     return YES;
@@ -150,27 +144,29 @@
     [self search:searchText];
 }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+    if ( searchBar.text.length >= 1 ) {
+        [self getService_by_name:searchBar.text];
+        NSLog(@"%@",searchBar.text);
+    }
+    if (searchBar.text.length == 0) {
+        filtered_services = [[NSMutableArray alloc] initWithArray:services];
+        [self setMapPin];
+        [self.tblview reloadData];
+    }
+    
     [searchBar resignFirstResponder];
 }
 
 - (void) getService_by_name:(NSString *)searchkey{
-    NSMutableArray *temp_services = [[NSMutableArray alloc] init];
-    for (int i = 0; i < [services count]; i++) {
-        if ([[services[i] objectForKey:@"service_name"] containsString:searchkey]) {
-            [temp_services addObject:services[i]];
-        }
-    }
-    [filtered_services removeAllObjects];
-    filtered_services = temp_services;
-    [self setMapPin];
-    [self.tblview reloadData];
+    [self getService:searchkey];
 }
 
 - (void) setMapPin{
     //set pin
-    MKPointAnnotation *secondpoint=[[MKPointAnnotation alloc] init];
-    CLLocationCoordinate2D pin_location;
+    
     for (int i = 0; i < [filtered_services count]; i++) {
+        MKPointAnnotation *secondpoint=[[MKPointAnnotation alloc] init];
+        CLLocationCoordinate2D pin_location;
         pin_location.latitude = [[filtered_services[i] objectForKey:@"latitude"] floatValue];
         pin_location.longitude = [[filtered_services[i] objectForKey:@"longitude"] floatValue];
         
@@ -193,10 +189,18 @@
 -(ServiceTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *tableIdentifier = @"found_serviceCell";
     ServiceTableViewCell *serviceCell = (ServiceTableViewCell*)[tableView dequeueReusableCellWithIdentifier:tableIdentifier];
-    [serviceCell.cellImageView sd_setImageWithURL:[NSURL URLWithString:[filtered_services[indexPath.row] objectForKey:@"service_image"]]];
+    
     NSLog(@"%@",[filtered_services[indexPath.row] objectForKey:@"service_image"]);
-    serviceCell.cellLabel.text = [filtered_services[indexPath.row] objectForKey:@"service_name"];
-    self.selected_service_id = [filtered_services[indexPath.row] objectForKey:@"service_id"];
+    if ([filtered_services count] > indexPath.row) {
+        serviceCell.cellLabel.text = [filtered_services[indexPath.row] objectForKey:@"service_name"];
+        self.selected_service_id = [filtered_services[indexPath.row] objectForKey:@"service_id"];
+        [serviceCell.cellImageView sd_setImageWithURL:[NSURL URLWithString:[filtered_services[indexPath.row] objectForKey:@"service_image"]]];
+    }
+    else    {
+        serviceCell.cellLabel.text = @"";
+        [serviceCell.cellImageView setImage:[UIImage imageNamed:@""]];
+    }
+    
     return serviceCell;
 }
 

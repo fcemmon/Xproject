@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "X-Project/ServiceViewController.m"
-            timestampString = "455824557.180858"
+            timestampString = "457348947.770467"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
-            landmarkName = "-createService"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
+            landmarkName = "-createService:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

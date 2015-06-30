@@ -14,7 +14,7 @@
 #import "AppManager.h"
 #define METERS_PER_MILE 1852
 
-@interface ServiceViewController ()<TakePhotoDelegate,CLLocationManagerDelegate>{
+@interface ServiceViewController ()<TakePhotoDelegate,CLLocationManagerDelegate, UITextFieldDelegate>{
     CLLocationCoordinate2D currentCentre;
     float latitude,longitude;
 }
@@ -62,7 +62,7 @@
     MKPointAnnotation *secondpoint=[[MKPointAnnotation alloc]init];
     secondpoint.coordinate=currentCentre;
     secondpoint.title = @"My location";
-    [self.mapView addAnnotation:secondpoint];
+//    [self.mapView addAnnotation:secondpoint];
 }
 
 #pragma mark - Button Actions
@@ -83,9 +83,34 @@
     self.imageView.image = aImage;
 }
 
+#pragma mark - upload Image 
+
+- (void)uploadImage {
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+
+    NSData *imageData = UIImageJPEGRepresentation(self.imageView.image, 0.5);
+    
+    NSString * postImageURL = [NSString stringWithFormat:@"%@services/postimage?user_id=%@", mHostURL, self.user_id];
+    [manager POST:postImageURL parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData){
+        [formData appendPartWithFileData:imageData name:@"photo" fileName:@"image.jpg" mimeType:@"image/jpeg"];
+    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Success: %@", responseObject);
+        NSDictionary *jsonResult = responseObject;
+        if ([[jsonResult objectForKey:@"status"] isEqualToString:@"success"]) {
+            NSString * fileURL = [jsonResult objectForKey:@"photo_url"];
+            [self createService:fileURL];
+        }else{
+            [[[UIAlertView alloc] initWithTitle:@"Server Error" message:@"Server error occured" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
 #pragma mark - API Function
 
-- (void)createService {
+- (void)createService:(NSString * )imageURL {
     NSLog(@"Create Service");
     NSLog(@"%@",self.username.text);
     NSLog(@"%@",self.phone_number.text);
@@ -110,12 +135,10 @@
                                  @"email_type":@"",
                                  @"address":self.address.text,
                                  @"address_type":@"",
+                                 @"photo":imageURL
                                  };
-    NSData *imageData = UIImageJPEGRepresentation(self.imageView.image, 0.5);
-
-    [manager POST:string_url parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:imageData name:@"photo" fileName:@"image.jpg" mimeType:@"image/jpeg"];
-    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
+    [manager POST:string_url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Success: %@", responseObject);
         NSDictionary *jsonResult = responseObject;
         if ([[jsonResult objectForKey:@"status"] isEqualToString:@"success"]) {
@@ -127,5 +150,26 @@
         NSLog(@"Error: %@", error);
     }];
 }
+
+#pragma mark -
+
+#pragma mark TextView delegate
+
+-(BOOL)textFieldShouldReturn:(UITextField*)textField
+{
+    NSInteger nextTag = textField.tag + 1;
+    // Try to find next responder
+    UIResponder* nextResponder = [textField.superview viewWithTag:nextTag];
+    if (nextResponder) {
+        // Found next responder, so set it.
+        [nextResponder becomeFirstResponder];
+    } else {
+        // Not found, so remove keyboard.
+        [textField resignFirstResponder];
+    }
+    return NO; // We do not want UITextField to insert line-breaks.
+}
+
+#pragma mark -
 
 @end

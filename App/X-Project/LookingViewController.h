@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LookingViewController : UICollectionViewController<UICollectionViewDataSource,UICollectionViewDelegate>
-@property (strong, nonatomic) IBOutlet UICollectionView *ViewerImages;
+@interface LookingViewController : UIViewController<UITableViewDataSource, UITableViewDataSource>
+@property (weak, nonatomic) IBOutlet UITableView *ViewerImages;
+
 
 @end

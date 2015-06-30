@@ -30,6 +30,7 @@
 @property (nonatomic, strong) UIPanGestureRecognizer *dynamicTransitionPanGesture;
 @property (nonatomic, strong) NSString *user_id;
 @property (nonatomic, strong) AppManager *appManager;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIdentifier;
 
 @end
 
@@ -140,11 +141,18 @@
     NSLog(@"%@", phonenumbers);
     NSDictionary *parameters = @{@"user_id": self.user_id,
                                  @"phonenumbers": phonenumbers};
+    
+    [self.activityIdentifier startAnimating];
+    
     [manager POST:string_url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         NSDictionary *jsonResult = responseObject;
+        
+        [self.activityIdentifier stopAnimating];
+        
         if ([[jsonResult objectForKey:@"status"] isEqualToString:@"success"]) {
             if ([[jsonResult objectForKey:@"count"] isEqualToNumber:[NSNumber numberWithInt:0]]) {
+                [self.contactList reloadData];
                 NSLog(@"%s", "No datas");
             }else{
                 NSArray *service_contacts = [jsonResult objectForKey:@"contacts"];
@@ -184,9 +192,11 @@
         }
         else{
             [[[UIAlertView alloc] initWithTitle:@"Failed" message:@"Failed to read data from server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            [self.contactList reloadData];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [self.activityIdentifier stopAnimating];
     }];
 }
 
@@ -237,7 +247,7 @@
     return [contactsArray count];
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *MyIdentifier = @"MyReuseIdentifier";
+    static NSString *MyIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:MyIdentifier];
@@ -270,7 +280,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
+    if (indexPath.section == 0 && [registeredContectList count] > indexPath.row) {
         currentPosition = (int)indexPath.row;
         NSDictionary * temp = [registeredContectList objectAtIndex:indexPath.row];
         if ([[[registeredContectList objectAtIndex:indexPath.row] objectForKey:@"favorite"] isEqual:@"0"] || [[[registeredContectList objectAtIndex:indexPath.row] objectForKey:@"favorite"] isEqual:@""]) {
@@ -309,7 +319,6 @@
         [self.navigationController.view removeGestureRecognizer:self.dynamicTransitionPanGesture];
         [self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
     }
-    
 }
 
 - (void) removeGesture {

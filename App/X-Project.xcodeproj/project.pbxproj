@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6321FF321B424028004A8130 /* ViewerImageCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6321FF311B424028004A8130 /* ViewerImageCellTableViewCell.m */; };
 		632383121B2B2BA1004F5680 /* favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = 632383101B2B2BA1004F5680 /* favorite.png */; };
 		632383131B2B2BA1004F5680 /* userprofile.png in Resources */ = {isa = PBXBuildFile; fileRef = 632383111B2B2BA1004F5680 /* userprofile.png */; };
-		8447F5E61B20857F00AB5CAC /* LookingCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8447F5E51B20857F00AB5CAC /* LookingCollectionViewCell.m */; };
 		845CB03D1B1D45B9009952BE /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845CB03C1B1D45B9009952BE /* MapKit.framework */; };
 		845CB03F1B1D4E9A009952BE /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845CB03E1B1D4E9A009952BE /* AddressBook.framework */; };
 		845CB04C1B1DD929009952BE /* MosaicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 845CB0431B1DD929009952BE /* MosaicLayout.m */; };
@@ -48,10 +48,10 @@
 /* Begin PBXFileReference section */
 		29E25E2450488B3F72C4BA24 /* Pods-X-Project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-X-Project.debug.xcconfig"; path = "Pods/Target Support Files/Pods-X-Project/Pods-X-Project.debug.xcconfig"; sourceTree = "<group>"; };
 		2B34C21E5D1A052A46447CA2 /* Pods-X-Project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-X-Project.release.xcconfig"; path = "Pods/Target Support Files/Pods-X-Project/Pods-X-Project.release.xcconfig"; sourceTree = "<group>"; };
+		6321FF301B424028004A8130 /* ViewerImageCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewerImageCellTableViewCell.h; sourceTree = "<group>"; };
+		6321FF311B424028004A8130 /* ViewerImageCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewerImageCellTableViewCell.m; sourceTree = "<group>"; };
 		632383101B2B2BA1004F5680 /* favorite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favorite.png; sourceTree = "<group>"; };
 		632383111B2B2BA1004F5680 /* userprofile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = userprofile.png; sourceTree = "<group>"; };
-		8447F5E41B20857F00AB5CAC /* LookingCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LookingCollectionViewCell.h; sourceTree = "<group>"; };
-		8447F5E51B20857F00AB5CAC /* LookingCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LookingCollectionViewCell.m; sourceTree = "<group>"; };
 		845CB03C1B1D45B9009952BE /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		845CB03E1B1D4E9A009952BE /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		845CB0421B1DD929009952BE /* MosaicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MosaicLayout.h; sourceTree = "<group>"; };
@@ -328,8 +328,8 @@
 				849FC56D1B18FC0400112B43 /* MenuItem.m */,
 				845CB05C1B1F1A93009952BE /* ServiceTableViewCell.h */,
 				845CB05D1B1F1A93009952BE /* ServiceTableViewCell.m */,
-				8447F5E41B20857F00AB5CAC /* LookingCollectionViewCell.h */,
-				8447F5E51B20857F00AB5CAC /* LookingCollectionViewCell.m */,
+				6321FF301B424028004A8130 /* ViewerImageCellTableViewCell.h */,
+				6321FF311B424028004A8130 /* ViewerImageCellTableViewCell.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -504,13 +504,13 @@
 				849FC5861B19611800112B43 /* METransitions.m in Sources */,
 				8496CD151B16ADF100DED95B /* AppDelegate.m in Sources */,
 				845CB04D1B1DD929009952BE /* MosaicData.m in Sources */,
+				6321FF321B424028004A8130 /* ViewerImageCellTableViewCell.m in Sources */,
 				849FC5941B19A92600112B43 /* LookingViewController.m in Sources */,
 				849FC56E1B18FC0400112B43 /* MenuItem.m in Sources */,
 				845CB04E1B1DD929009952BE /* MosaicCell.m in Sources */,
 				849FC59E1B1CDA8B00112B43 /* ServiceViewController.m in Sources */,
 				8496CD121B16ADF100DED95B /* main.m in Sources */,
 				849FC59B1B1CD63F00112B43 /* CustomTextField.m in Sources */,
-				8447F5E61B20857F00AB5CAC /* LookingCollectionViewCell.m in Sources */,
 				8496CD561B16C46400DED95B /* HomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -622,13 +622,13 @@
 			baseConfigurationReference = 29E25E2450488B3F72C4BA24 /* Pods-X-Project.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: David Lui (K5RM9NT96M)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: David Lui (L2DUU9Q97H)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: David Lui (L2DUU9Q97H)";
 				INFOPLIST_FILE = "X-Project/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "72e985fe-fc94-44e5-b67d-c75f2d66bef9";
+				PROVISIONING_PROFILE = "6e074892-100d-43c7-85f0-516b666b4644";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -638,13 +638,13 @@
 			baseConfigurationReference = 2B34C21E5D1A052A46447CA2 /* Pods-X-Project.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: David Lui (K5RM9NT96M)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: David Lui (L2DUU9Q97H)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: David Lui (L2DUU9Q97H)";
 				INFOPLIST_FILE = "X-Project/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "72e985fe-fc94-44e5-b67d-c75f2d66bef9";
+				PROVISIONING_PROFILE = "6e074892-100d-43c7-85f0-516b666b4644";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

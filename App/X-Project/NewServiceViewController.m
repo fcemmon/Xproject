@@ -94,7 +94,7 @@
 }
 
 - (IBAction)offerButtonTapped:(id)sender{
-    [self.serviceViewController createService];
+    [self.serviceViewController uploadImage];
 }
 /*
 #pragma mark - Navigation

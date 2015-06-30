@@ -23,5 +23,6 @@
 @property (nonatomic, weak) IBOutlet CustomTextField *service_name;
 
 - (void)createService;
+- (void)uploadImage;
 
 @end
