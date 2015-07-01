@@ -24,5 +24,6 @@
 
 - (void)createService;
 - (void)uploadImage;
+- (void)setImage:(UIImage *)aImage;
 
 @end

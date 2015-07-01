@@ -13,6 +13,8 @@ static AppManager *sharedAppManager = nil;
 @interface AppManager()
 @property (nonatomic,strong) NSString *user_Token;
 @property (nonatomic,strong) NSString *user_id;
+@property (readwrite) double currnetLogitude;
+@property (nonatomic, readwrite) double currentLatitude;
 @end
 
 @implementation AppManager
@@ -49,5 +51,17 @@ static AppManager *sharedAppManager = nil;
         self.user_id = [[NSUserDefaults standardUserDefaults] objectForKey:USER_ID];
     }
     return self.user_id;
+}
+-(void)setCurrentLatitude:(double)latitude   {
+    self.currentLatitude = latitude;
+}
+-(void)setCurrentLongitude:(double)longitude    {
+    self.currnetLogitude = longitude;
+}
+- (double)getCurrentLatitude    {
+    return self.currentLatitude;
+}
+- (double)getCurrentLongitude   {
+    return self.currnetLogitude;
 }
 @end

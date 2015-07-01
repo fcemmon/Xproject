@@ -98,6 +98,10 @@
 #pragma Web server APIs
 - (void) getService:(NSString * )searchKey{
     
+    self.label1.text = @"";
+    self.label2.text = @"";
+    [self.image setImage:[UIImage imageNamed:@"userprofile.png"]];
+    
     NSString *string_url = [NSString stringWithFormat:@"%@%@",mHostURL,mGetService];
     [self.activityIndifiner startAnimating];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -206,7 +210,10 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.image sd_setImageWithURL:[NSURL URLWithString:[filtered_services[indexPath.row] objectForKey:@"service_image"]]];
-    self.label1.text = [filtered_services[indexPath.row] objectForKey:@"service_name"];
+    NSString * serviceTitle = [filtered_services[indexPath.row] objectForKey:@"service_name"];
+    NSString * serviceContext = [NSString stringWithFormat:@"This service is offered by %@", [filtered_services[indexPath.row] objectForKey:@"creater_name"]];
+    self.label1.text = [NSString stringWithFormat:@"%@.  %@", [filtered_services[indexPath.row] objectForKey:@"service_id" ], serviceTitle];
+    self.label2.text = serviceContext;
 }
 
 #pragma mark - Gesture

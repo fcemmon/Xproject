@@ -244,28 +244,41 @@
 }
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     NSLog(@"%lu", (unsigned long)[contactsArray count]);
+    if (section == 0) {
+        return [registeredContectList count];
+    }
     return [contactsArray count];
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *MyIdentifier = @"Cell";
+    static NSString *MyIdentifier = @"contactCell";
+    if (indexPath.section == 1) {
+        MyIdentifier = @"Cell";
+    }
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:MyIdentifier];
     }
-    cell.backgroundColor = [UIColor clearColor];
+    
     if (indexPath.section == 0) {
 //        cell.
+        
+        UIImageView * favoriteImage = (UIImageView*)[cell viewWithTag:200];
+        UILabel * contactLabel = (UILabel *)[cell viewWithTag:201];
+        UIButton * mapViewButton = (UIButton *)[cell viewWithTag:202];
+        [mapViewButton setTag:indexPath.row];
+        [mapViewButton addTarget:self action:@selector(openMap:) forControlEvents:UIControlEventTouchUpInside];
+        
         if ([registeredUserIndexList count] > indexPath.row) {
             NSString *contact_name = [NSString stringWithFormat:@"%@ %@", [registeredUserIndexList[indexPath.row] objectForKey:@"firstName"],[registeredUserIndexList[indexPath.row] objectForKey:@"lastName"]];
-            cell.textLabel.text = contact_name;
+            contactLabel.text = contact_name;
             NSArray * phonenumber = [registeredUserIndexList[indexPath.row] objectForKey:@"phone"];
             for (int i = 0; i < [phonenumber count]; i ++) {
                 if ([[[registeredContectList objectAtIndex:indexPath.row] objectForKey:@"phonenumber"] isEqual:[phonenumber objectAtIndex:i]]) {
                     if (![[[registeredContectList objectAtIndex:indexPath.row] objectForKey:@"favorite"] isEqual:@""] && ![[[registeredContectList objectAtIndex:indexPath.row] objectForKey:@"favorite"] isEqual:@"0"]) {
-                        cell.imageView.image = [UIImage imageNamed:@"favorite.png"];
+                        favoriteImage.image = [UIImage imageNamed:@"favorite.png"];
                     }
                     else    {
-                        cell.imageView.image = [UIImage imageNamed:@""];
+                        favoriteImage.image = [UIImage imageNamed:@""];
                     }
                 }
             }
@@ -277,6 +290,11 @@
         }
     }
     return cell;
+}
+
+- (void)openMap:(UIButton *)sender  {
+    NSInteger * row = sender.tag;
+//    appManager setCurrentLongitude:<#(double)#>
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

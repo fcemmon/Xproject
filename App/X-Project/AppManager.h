@@ -16,4 +16,8 @@
 - (NSString*) getUserToken;
 - (void) setUserID:(NSString*)_id;
 - (NSString*) getUserID;
+- (double)getCurrentLongitude;
+- (void)setCurrentLongitude:(double)longitude;
+- (double)getCurrentLatitude;
+- (void)setCurrentLatitude:(double)latitude;
 @end

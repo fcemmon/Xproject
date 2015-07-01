@@ -10,6 +10,9 @@
 #import "TakePhoto.h"
 #import <CoreLocation/CoreLocation.h>
 #import <AFNetworking.h>
+#import <UIViewController+ECSlidingViewController.h>
+#import "METransitions.h"
+#import "MEDynamicTransition.h"
 #import "Constants.h"
 #import "AppManager.h"
 #define METERS_PER_MILE 1852
@@ -23,6 +26,8 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSString *user_id;
 @property (strong, nonatomic) AppManager *appManager;
+@property (nonatomic, strong) METransitions *transitions;
+@property (nonatomic, strong) UIPanGestureRecognizer *dynamicTransitionPanGesture;
 
 @end
 
@@ -81,6 +86,7 @@
 - (void)setImage:(UIImage *)aImage {
     self.mImage = aImage;
     self.imageView.image = aImage;
+    [self.takePhoto removeFromParentViewController];
 }
 
 #pragma mark - upload Image 
@@ -171,5 +177,58 @@
 }
 
 #pragma mark -
+
+#pragma mark - Gesture
+
+- (void) setGesture {
+    self.transitions.dynamicTransition.slidingViewController = self.slidingViewController;
+    
+    NSDictionary *transitionData = self.transitions.all[0];
+    id<ECSlidingViewControllerDelegate> transition = transitionData[@"transition"];
+    if (transition == (id)[NSNull null]) {
+        self.slidingViewController.delegate = nil;
+    } else {
+        self.slidingViewController.delegate = transition;
+    }
+    
+    NSString *transitionName = transitionData[@"name"];
+    if ([transitionName isEqualToString:METransitionNameDynamic]) {
+        self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGestureCustom;
+        self.slidingViewController.customAnchoredGestures = @[self.dynamicTransitionPanGesture];
+        [self.navigationController.view removeGestureRecognizer:self.slidingViewController.panGesture];
+        [self.navigationController.view addGestureRecognizer:self.dynamicTransitionPanGesture];
+    } else {
+        self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGesturePanning;
+        self.slidingViewController.customAnchoredGestures = @[];
+        [self.navigationController.view removeGestureRecognizer:self.dynamicTransitionPanGesture];
+        [self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
+    }
+    
+}
+
+- (void) removeGesture {
+    [self.navigationController.view removeGestureRecognizer:self.dynamicTransitionPanGesture];
+    [self.navigationController.view removeGestureRecognizer:self.slidingViewController.panGesture];
+}
+
+- (UIPanGestureRecognizer *)dynamicTransitionPanGesture {
+    if (_dynamicTransitionPanGesture) return _dynamicTransitionPanGesture;
+    
+    _dynamicTransitionPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self.transitions.dynamicTransition action:@selector(handleGesture:)];
+    
+    return _dynamicTransitionPanGesture;
+}
+
+- (void) handleGesture:(UIPanGestureRecognizer *)recognizer {
+    [self.transitions.dynamicTransition handlePanGesture:recognizer];
+}
+
+- (IBAction)menuTap:(id)sender {
+    [self.slidingViewController anchorTopViewToRightAnimated:YES];
+}
+
+- (IBAction)offerButtonClicked:(id)sender {
+    [self uploadImage];
+}
 
 @end

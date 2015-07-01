@@ -42,6 +42,7 @@
 		849FC5981B1CB19800112B43 /* TakePhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 849FC5971B1CB19800112B43 /* TakePhoto.m */; };
 		849FC59B1B1CD63F00112B43 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 849FC59A1B1CD63F00112B43 /* CustomTextField.m */; };
 		849FC59E1B1CDA8B00112B43 /* ServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 849FC59D1B1CDA8B00112B43 /* ServiceViewController.m */; };
+		E12942171B446E42008B3141 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E12942161B446E42008B3141 /* MapViewController.m */; };
 		EC2205EF257936D8E96F5144 /* libPods-X-Project.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9668F8F0C7A9F8002CFAED61 /* libPods-X-Project.a */; };
 /* End PBXBuildFile section */
 
@@ -112,6 +113,8 @@
 		849FC59C1B1CDA8B00112B43 /* ServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceViewController.h; sourceTree = "<group>"; };
 		849FC59D1B1CDA8B00112B43 /* ServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceViewController.m; sourceTree = "<group>"; };
 		9668F8F0C7A9F8002CFAED61 /* libPods-X-Project.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-X-Project.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E12942151B446E42008B3141 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		E12942161B446E42008B3141 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -306,6 +309,8 @@
 				849FC5931B19A92600112B43 /* LookingViewController.m */,
 				849FC59C1B1CDA8B00112B43 /* ServiceViewController.h */,
 				849FC59D1B1CDA8B00112B43 /* ServiceViewController.m */,
+				E12942151B446E42008B3141 /* MapViewController.h */,
+				E12942161B446E42008B3141 /* MapViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -494,6 +499,7 @@
 				849FC5871B19611800112B43 /* METransitionsViewController.m in Sources */,
 				845CB05E1B1F1A93009952BE /* ServiceTableViewCell.m in Sources */,
 				849FC5691B18FB8A00112B43 /* MenuItemView.m in Sources */,
+				E12942171B446E42008B3141 /* MapViewController.m in Sources */,
 				845CB04C1B1DD929009952BE /* MosaicLayout.m in Sources */,
 				849FC5851B19611800112B43 /* MEFoldAnimationController.m in Sources */,
 				849FC5981B1CB19800112B43 /* TakePhoto.m in Sources */,

@@ -30,13 +30,14 @@
     self.serviceViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ServiceViewController"];
     self.serviceViewController.view.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 640);
     
-    [self.scrollview addSubview:self.serviceViewController.view];
+    
     self.scrollview.contentSize = CGSizeMake(0, 640);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self setGesture];
+    [self.scrollview addSubview:self.serviceViewController.view];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
