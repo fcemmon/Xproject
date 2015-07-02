@@ -380,10 +380,18 @@
                                                     <outlet property="delegate" destination="xSc-B2-4cj" id="sMf-ar-YQ6"/>
                                                 </connections>
                                             </textField>
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Lo5-QW-s7N">
+                                                <rect key="frame" x="150" y="310" width="20" height="20"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="20" id="5vR-pU-vyU"/>
+                                                    <constraint firstAttribute="height" constant="20" id="WFb-RF-jxa"/>
+                                                </constraints>
+                                            </activityIndicatorView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="axr-UJ-FRv" firstAttribute="leading" secondItem="3ky-jq-iGo" secondAttribute="trailing" id="0KR-OM-5kC"/>
+                                            <constraint firstAttribute="centerX" secondItem="Lo5-QW-s7N" secondAttribute="centerX" id="1CK-k5-JMH"/>
                                             <constraint firstItem="slb-au-gDr" firstAttribute="leading" secondItem="uHo-Ir-lh0" secondAttribute="leading" id="3ST-Sd-E0y"/>
                                             <constraint firstItem="ccb-8c-xPp" firstAttribute="top" secondItem="fhM-ar-QAo" secondAttribute="bottom" constant="13" id="65p-wo-Oqn"/>
                                             <constraint firstItem="fhM-ar-QAo" firstAttribute="leading" secondItem="uHo-Ir-lh0" secondAttribute="leading" id="DCb-ae-Ox1"/>
@@ -401,6 +409,7 @@
                                             <constraint firstAttribute="width" constant="320" id="e9A-nn-WaP"/>
                                             <constraint firstAttribute="height" constant="640" id="efW-KG-Fmq"/>
                                             <constraint firstItem="axr-UJ-FRv" firstAttribute="top" secondItem="LXa-XQ-E6R" secondAttribute="bottom" constant="9" id="eh5-t0-n0j"/>
+                                            <constraint firstAttribute="centerY" secondItem="Lo5-QW-s7N" secondAttribute="centerY" id="fTc-52-X5F"/>
                                             <constraint firstItem="3ky-jq-iGo" firstAttribute="leading" secondItem="uHo-Ir-lh0" secondAttribute="leading" constant="10" id="g8H-4K-Han"/>
                                             <constraint firstAttribute="trailing" secondItem="slb-au-gDr" secondAttribute="trailing" id="ixm-K5-ZsE"/>
                                             <constraint firstItem="VUv-9V-fBM" firstAttribute="leading" secondItem="uHo-Ir-lh0" secondAttribute="leading" constant="10" id="l5d-n1-Pqd"/>
@@ -449,6 +458,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="640"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="Lo5-QW-s7N" id="xtC-8R-9N9"/>
                         <outlet property="address" destination="axr-UJ-FRv" id="JrJ-Bj-yRy"/>
                         <outlet property="btn_camera" destination="egY-YB-RrG" id="mkL-V8-Bwk"/>
                         <outlet property="email" destination="LXa-XQ-E6R" id="tAY-sm-dHF"/>
@@ -499,7 +509,7 @@
                                                         <constraint firstAttribute="height" constant="21" id="dbV-eX-AVT"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" tag="202" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y54-xB-Vdo">

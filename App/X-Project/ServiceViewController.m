@@ -28,6 +28,7 @@
 @property (strong, nonatomic) AppManager *appManager;
 @property (nonatomic, strong) METransitions *transitions;
 @property (nonatomic, strong) UIPanGestureRecognizer *dynamicTransitionPanGesture;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
 
@@ -93,6 +94,8 @@
 
 - (void)uploadImage {
     
+    [self.activityIndicator startAnimating];
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
 
     NSData *imageData = UIImageJPEGRepresentation(self.imageView.image, 0.5);
@@ -103,6 +106,7 @@
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Success: %@", responseObject);
         NSDictionary *jsonResult = responseObject;
+        [self.activityIndicator stopAnimating];
         if ([[jsonResult objectForKey:@"status"] isEqualToString:@"success"]) {
             NSString * fileURL = [jsonResult objectForKey:@"photo_url"];
             [self createService:fileURL];
@@ -110,7 +114,7 @@
             [[[UIAlertView alloc] initWithTitle:@"Server Error" message:@"Server error occured" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        [self.activityIndicator stopAnimating];
     }];
 }
 
@@ -129,6 +133,8 @@
     
     NSString *string_url = [NSString stringWithFormat:@"%@%@",mHostURL,mOfferService];
     
+    [self.activityIndicator startAnimating];
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = @{@"user_id": self.user_id,
                                  @"latitude":[NSString stringWithFormat:@"%f", currentCentre.latitude],
@@ -145,6 +151,7 @@
                                  };
     
     [manager POST:string_url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self.activityIndicator stopAnimating];
         NSLog(@"Success: %@", responseObject);
         NSDictionary *jsonResult = responseObject;
         if ([[jsonResult objectForKey:@"status"] isEqualToString:@"success"]) {
@@ -154,6 +161,7 @@
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [self.activityIndicator stopAnimating];
     }];
 }
 
