@@ -64,4 +64,8 @@ static AppManager *sharedAppManager = nil;
 - (double)getCurrentLongitude   {
     return self.currnetLogitude;
 }
+
+- (NSString *)getAddress    {
+    return self.address;
+}
 @end

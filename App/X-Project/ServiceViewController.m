@@ -62,6 +62,7 @@
     self.username.text = username;
     self.phone_number.text = phoneNumber;
     self.email.text = email;
+    self.address.text = [appManager getAddress];
     
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = YES;

@@ -10,6 +10,8 @@
 
 @interface AppManager : NSObject
 
+@property (strong, nonatomic) NSString * address;
+
 + (instancetype) sharedManager;
 
 - (void) setUserToken:(NSString*)token;
@@ -20,4 +22,5 @@
 - (void)setCurrentLongitude:(double)longitude;
 - (double)getCurrentLatitude;
 - (void)setCurrentLatitude:(double)latitude;
+- (NSString *)getAddress;
 @end
