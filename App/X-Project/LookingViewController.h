@@ -11,5 +11,4 @@
 @interface LookingViewController : UIViewController<UITableViewDataSource, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *ViewerImages;
 
-
 @end

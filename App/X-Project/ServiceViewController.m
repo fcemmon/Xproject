@@ -20,6 +20,7 @@
 @interface ServiceViewController ()<TakePhotoDelegate,CLLocationManagerDelegate, UITextFieldDelegate>{
     CLLocationCoordinate2D currentCentre;
     float latitude,longitude;
+    NSString * username, * phoneNumber, * email;
 }
 @property (nonatomic, strong) TakePhoto *takePhoto;
 @property (nonatomic, strong) UIImage *mImage;
@@ -42,6 +43,25 @@
     
     appManager = [AppManager sharedManager];
     self.user_id = [appManager getUserID];
+    
+    username = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
+    if (!username) {
+        username = @"";
+    }
+    
+    phoneNumber = [[NSUserDefaults standardUserDefaults] objectForKey:@"phoneNumber"];
+    if (!phoneNumber) {
+        phoneNumber = @"";
+    }
+    
+    email = [[NSUserDefaults standardUserDefaults] objectForKey:@"email"];
+    if (!email) {
+        email = @"";
+    }
+    
+    self.username.text = username;
+    self.phone_number.text = phoneNumber;
+    self.email.text = email;
     
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = YES;
@@ -155,6 +175,11 @@
         NSLog(@"Success: %@", responseObject);
         NSDictionary *jsonResult = responseObject;
         if ([[jsonResult objectForKey:@"status"] isEqualToString:@"success"]) {
+            
+            [[NSUserDefaults standardUserDefaults] setObject:self.username.text forKey:@"userName"];
+            [[NSUserDefaults standardUserDefaults] setObject:self.phone_number.text forKey:@"phoneNumber"];
+            [[NSUserDefaults standardUserDefaults] setObject:self.email.text forKey:@"email"];
+            
             [[[UIAlertView alloc] initWithTitle:@"Offer Service" message:@"Service created." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
         }else{
             [[[UIAlertView alloc] initWithTitle:@"Server Error" message:@"Server error occured" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
