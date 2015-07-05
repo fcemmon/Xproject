@@ -265,4 +265,80 @@
     [self uploadImage];
 }
 
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+{
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    
+    CLLocation *currentLocation = newLocation;
+    
+    if (currentLocation != nil)
+        NSLog(@"longitude = %.8f\nlatitude = %.8f", currentLocation.coordinate.longitude,currentLocation.coordinate.latitude);
+    
+    // stop updating location in order to save battery power
+    [manager stopUpdatingLocation];
+    
+    
+    [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *placemarks, NSError *error)
+     {
+         NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
+         if (error == nil && [placemarks count] > 0)
+         {
+             CLPlacemark *placemark = [placemarks lastObject];
+             
+             // strAdd -> take bydefault value nil
+             NSString *strAdd = nil;
+             
+             if ([placemark.subThoroughfare length] != 0)
+                 strAdd = placemark.subThoroughfare;
+             
+             if ([placemark.thoroughfare length] != 0)
+             {
+                 // strAdd -> store value of current location
+                 if ([strAdd length] != 0)
+                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark thoroughfare]];
+                 else
+                 {
+                     // strAdd -> store only this value,which is not null
+                     strAdd = placemark.thoroughfare;
+                 }
+             }
+             
+             if ([placemark.postalCode length] != 0)
+             {
+                 if ([strAdd length] != 0)
+                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark postalCode]];
+                 else
+                     strAdd = placemark.postalCode;
+             }
+             
+             if ([placemark.locality length] != 0)
+             {
+                 if ([strAdd length] != 0)
+                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark locality]];
+                 else
+                     strAdd = placemark.locality;
+             }
+             
+             if ([placemark.administrativeArea length] != 0)
+             {
+                 if ([strAdd length] != 0)
+                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark administrativeArea]];
+                 else
+                     strAdd = placemark.administrativeArea;
+             }
+             
+             if ([placemark.country length] != 0)
+             {
+                 if ([strAdd length] != 0)
+                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark country]];
+                 else
+                     strAdd = placemark.country;
+             }
+             
+             [self.address setText:strAdd];
+             appManager.address = strAdd;
+         }
+     }];
+}
+
 @end
