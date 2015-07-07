@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+
+     <LinearLayout
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:orientation="vertical" >
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="50dp"
+             android:orientation="vertical"
+             android:background="@color/drawer_list_item_color" >
+         </LinearLayout>
+
+         <LinearLayout
+             android:layout_width="fill_parent"
+             android:layout_height="50dp"
+             android:gravity="top"
+             android:orientation="vertical"
+             android:background="@color/drawer_list_item_color">
+
+          <Spinner
+       			android:id="@+id/menu_home"
+        		android:layout_width="match_parent"
+        		android:layout_height="wrap_content"
+        		android:prompt="@string/spinner_title" />
+
+         </LinearLayout>
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="50dp"
+             android:orientation="vertical" >
+
+             <SearchView
+                 android:id="@+id/searchView1"
+                 android:layout_width="fill_parent"
+                 android:inputType="text"
+                 android:imeOptions="actionSearch"
+                 android:layout_height="wrap_content" >
+             </SearchView>
+         </LinearLayout>
+
+         <fragment
+             android:id="@+id/googlemap"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:layout_weight="1"
+             class="com.google.android.gms.maps.SupportMapFragment" />
+
+         <LinearLayout
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:layout_weight="1" >
+
+             <LinearLayout
+                 android:layout_width="fill_parent"
+                 android:layout_height="fill_parent"
+                 android:layout_weight="1"
+                 android:orientation="vertical" >
+
+                 <TextView
+                     android:id="@+id/serviceId"
+                     android:layout_width="fill_parent"
+                     android:layout_height="fill_parent"
+                     android:layout_weight="2"
+                     android:text="Service Id"
+                     android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                 <LinearLayout
+                     android:layout_width="fill_parent"
+                     android:layout_height="fill_parent"
+                     android:layout_weight="1" >
+
+                     <ImageView
+                         android:id="@+id/serviceThumb"
+                         android:layout_width="fill_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_weight="2"
+                         android:src="@drawable/userprofile" />
+
+                     <TextView
+                         android:id="@+id/serviceDetail"
+                         android:layout_width="fill_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_weight="1"
+                         android:text="" />
+
+                 </LinearLayout>
+
+                 <LinearLayout
+                     android:layout_width="fill_parent"
+                     android:layout_height="fill_parent"
+                     android:layout_weight="2" >
+
+                     <Button
+                         android:id="@+id/likeButton"
+                         android:layout_width="fill_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_weight="1"
+                         android:text="Like" />
+
+                     <Button
+                         android:id="@+id/commentButton"
+                         android:layout_width="fill_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_weight="1"
+                         android:text="Comment" />
+
+                     <Button
+                         android:id="@+id/skipButton"
+                         android:layout_width="fill_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_weight="1"
+                         android:text="Skip" />
+
+                 </LinearLayout>
+
+             </LinearLayout>
+
+             <ListView
+                 android:id="@+id/serviceList"
+                 android:layout_width="fill_parent"
+                 android:layout_height="fill_parent"
+                 android:layout_weight="1" >
+             </ListView>
+
+         </LinearLayout>
+
+     </LinearLayout>
+
+</RelativeLayout>

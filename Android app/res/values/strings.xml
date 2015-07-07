@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Xproject</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_home">Home</string>
+	<string name="action_createservice">Create Service</string>
+    <string name="action_contact">Contact</string>
+	<string name="action_viewer">Viewer</string>
+	<string name="openDrawer">Menu</string>
+	<string name="closeDrawer">Menu</string>
+    <string name="google_maps_key">AIzaSyAGlyXwrnzp4yGOPhBvjxVCCbBoNviq-ko</string>
+    <string name="search_label">Find Service</string>
+    <string name="search_hint">Restraunt</string>
+    
+    <string name="spinner_title">Menu</string>
+    
+    <string-array name="country_arrays">
+        <item>Home</item>
+        <item>Create Service</item>
+        <item>Contact</item>
+        <item>Viewer</item>
+    </string-array>
+</resources>

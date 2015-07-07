@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="drawer_array">
+        <item>Home</item>
+        <item>Create Service</item>
+        <item>Contact</item>
+        <item>Viewer</item>
+    </string-array>
+    <string-array name="favdrink_array">
+        <item>Beer</item>
+        <item>Wine</item>
+        <item>Mixed Drink</item>
+        <item>Angry</item>
+        <item>Glasses</item>
+    </string-array>
+
+</resources>

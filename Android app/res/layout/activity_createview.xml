@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+
+     <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical" >
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="50dp"
+              android:background="@color/drawer_list_item_color"
+              android:orientation="vertical" >
+
+          </LinearLayout>
+
+          <LinearLayout
+              android:layout_width="fill_parent"
+              android:layout_height="50dp"
+              android:background="@color/drawer_list_item_color"
+              android:gravity="top"
+              android:orientation="vertical" >
+
+             <Spinner
+       			android:id="@+id/menu_createservice"
+        		android:layout_width="match_parent"
+        		android:layout_height="wrap_content"
+        		android:prompt="@string/spinner_title" />
+          </LinearLayout>
+
+          <LinearLayout
+              android:layout_width="wrap_content"
+              android:layout_height="fill_parent"
+              android:layout_weight="1"
+              android:orientation="vertical" >
+
+              <ScrollView
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content" >
+
+                  <RelativeLayout
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content" >
+
+                      <LinearLayout
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentBottom="true"
+                          android:layout_weight="1"
+                          android:background="@color/white"
+                          android:gravity="bottom"
+                          android:orientation="vertical" >
+
+                          <RelativeLayout
+                              android:layout_width="match_parent"
+                              android:layout_height="fill_parent"
+                              android:layout_weight="2" >
+
+                              <ImageView
+                                  android:id="@+id/serviceProfileImage"
+                                  android:layout_width="fill_parent"
+                                  android:layout_height="wrap_content"
+                                  android:src="@drawable/userprofile" />
+
+                              <ImageView
+                                  android:id="@+id/camera"
+                                  android:layout_width="50dp"
+                                  android:layout_height="50dp"
+                                  android:layout_alignParentBottom="true"
+                                  android:layout_alignParentRight="true"
+                                  android:src="@drawable/camera" />
+                          </RelativeLayout>
+
+                          <LinearLayout
+                              android:layout_width="match_parent"
+                              android:layout_height="fill_parent"
+                              android:layout_weight="1"
+                              android:orientation="vertical" >
+
+                              <LinearLayout
+                                  android:layout_width="match_parent"
+                                  android:layout_height="40dp" >
+
+                                  <EditText
+                                      android:id="@+id/serviceName"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:layout_marginLeft="38dp"
+                                      android:layout_weight="1"
+                                      android:ems="10"
+                                      android:hint="serviceName" >
+
+                                      <requestFocus />
+                                  </EditText>
+                              </LinearLayout>
+
+                              <LinearLayout
+                                  android:layout_width="match_parent"
+                                  android:layout_height="40dp" >
+
+                                  <ImageView
+                                      android:id="@+id/imageView2"
+                                      android:layout_width="38dp"
+                                      android:layout_height="38dp"
+                                      android:src="@drawable/userimage" />
+
+                                  <EditText
+                                      android:id="@+id/userNameView"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:layout_weight="1"
+                                      android:ems="10"
+                                      android:hint="User Name"
+                                      android:inputType="textPersonName" />
+                              </LinearLayout>
+
+                              <LinearLayout
+                                  android:layout_width="match_parent"
+                                  android:layout_height="40dp" >
+
+                                  <ImageView
+                                      android:id="@+id/imageView3"
+                                      android:layout_width="38dp"
+                                      android:layout_height="35dp"
+                                      android:src="@drawable/phone" />
+
+                                  <EditText
+                                      android:id="@+id/phoneNumberView"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:layout_weight="1"
+                                      android:ems="10"
+                                      android:hint="Phone Number"
+                                      android:inputType="phone" />
+                              </LinearLayout>
+
+                              <LinearLayout
+                                  android:layout_width="match_parent"
+                                  android:layout_height="40dp" >
+
+                                  <ImageView
+                                      android:id="@+id/imageView4"
+                                      android:layout_width="38dp"
+                                      android:layout_height="42dp"
+                                      android:src="@drawable/email" />
+
+                                  <EditText
+                                      android:id="@+id/emailVeiew"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:layout_weight="1"
+                                      android:ems="10"
+                                      android:hint="Email"
+                                      android:inputType="textEmailAddress" />
+                              </LinearLayout>
+
+                              <LinearLayout
+                                  android:layout_width="match_parent"
+                                  android:layout_height="40dp" >
+
+                                  <ImageView
+                                      android:id="@+id/imageView5"
+                                      android:layout_width="38dp"
+                                      android:layout_height="match_parent"
+                                      android:src="@drawable/location" />
+
+                                  <EditText
+                                      android:id="@+id/addressView"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:layout_weight="1"
+                                      android:ems="10"
+                                      android:hint="Address" />
+                              </LinearLayout>
+
+                              <LinearLayout
+                                  android:layout_width="match_parent"
+                                  android:layout_height="50dp"
+                                  android:orientation="vertical" >
+
+                                  <Button
+                                      android:id="@+id/offer"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:layout_gravity="center"
+                                      android:text="Offer" />
+                              </LinearLayout>
+                          </LinearLayout>
+                      </LinearLayout>
+                  </RelativeLayout>
+              </ScrollView>
+          </LinearLayout>
+      </LinearLayout>
+
+</RelativeLayout>

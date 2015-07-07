@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="tab_string_color">#C5C5C5</color>
+    <color name="tab_sel_color">#8DCD61</color>
+    <color name="login_bg">#80D7D7D7</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="login_button_color">#9ACD65</color>
+    <color name="forgot_password_color">#818181</color>
+    <color name="drawer_list_item_color">#92C360</color>
+    <color name="main_divider">#515151</color>
+    <color name="divider">#e2ddda</color>
+    <color name="red">#FF0000</color>
+    <color name="hint_color">#CCCCCC</color>
+    <color name="text_loc_hint_color">#525252</color>
+    <color name="result_lit_item_color">#616161</color>
+    <color name="bar_description_color">#8B8B8B</color>
+    <color name="profile_info_color">#92c360</color>
+    <color name="post_layout_color">#e8e6e5</color>
+    <color name="post_text_bg_color">#f3f3f3</color>
+    <color name="post_text_hint_color">#cbcaca</color>
+    <color name="text_field">#ffd1d1d1</color>
+    <color name="green">#00DD00</color>
+</resources>
